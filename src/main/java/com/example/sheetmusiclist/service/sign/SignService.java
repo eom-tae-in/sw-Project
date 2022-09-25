@@ -116,7 +116,7 @@ public class SignService {
             throw new MemberUsernameAlreadyExistsException(req.getUsername());
         }
         if (memberRepository.existsByNickname(req.getNickname())) {
-            throw new MemberNicknameAlreadyExistsException(req.getName());
+            throw new MemberNicknameAlreadyExistsException(req.getNickname());
         }
         if (memberRepository.existsByEmail(req.getEmail())) {
             throw new MemberEmailAlreadyExistsException(req.getEmail());
