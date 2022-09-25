@@ -31,6 +31,7 @@ public class LocalFileService implements FileService{
 
     @Override
     public void upload(MultipartFile file, String filename) {
+        System.out.println(location);
         try {
             file.transferTo(new File(location + filename));
             // file.transferTo로 파일을 저장한다.
