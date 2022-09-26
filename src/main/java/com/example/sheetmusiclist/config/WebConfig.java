@@ -1,5 +1,6 @@
 package com.example.sheetmusiclist.config;
 
+import com.amazonaws.services.s3.AmazonS3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -18,17 +19,23 @@ import java.time.Duration;
 @EnableWebMvc
 @Configuration
 @RequiredArgsConstructor
-@PropertySource("classpath:pdf.properties")
+@PropertySource("classpath:secret.properties")
 public class WebConfig implements WebMvcConfigurer {
     private final MessageSource messageSource;
 
     String location = System.getProperty("user.dir") + "/src/main/resources/pdfs/";
 
+    private final AmazonS3 amazonS3;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/pdfs/**")
-                .addResourceLocations("file:" + location)
+                .addResourceLocations("file:" + amazonS3.getUrl(bucket,"/**").toString())
                 .setCacheControl(CacheControl.maxAge(Duration.ofHours(1L)).cachePublic());
     }
 
@@ -42,6 +49,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins("/**");
     }
 }

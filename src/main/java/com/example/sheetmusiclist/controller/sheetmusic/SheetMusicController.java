@@ -1,6 +1,7 @@
 package com.example.sheetmusiclist.controller.sheetmusic;
 
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.example.sheetmusiclist.dto.sheetmusic.SheetMusicCreateRequestDto;
 import com.example.sheetmusiclist.dto.sheetmusic.SheetMusicEditRequestDto;
 import com.example.sheetmusiclist.dto.sheetmusic.SheetMusicSearchRequestDto;
@@ -8,6 +9,7 @@ import com.example.sheetmusiclist.entity.member.Member;
 import com.example.sheetmusiclist.exception.MemberNotFoundException;
 import com.example.sheetmusiclist.repository.member.MemberRepository;
 import com.example.sheetmusiclist.response.Response;
+import com.example.sheetmusiclist.service.S3Service;
 import com.example.sheetmusiclist.service.sheetmusic.SheetMusicService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +19,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+
 @Api(value = "SheetMusic Controller",tags = "SheetMusic")
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +35,8 @@ public class SheetMusicController {
 
     private final SheetMusicService sheetMusicService;
     private final MemberRepository memberRepository;
+
+    private final S3Service s3Service;
 
     // 악보 등록
     @ApiOperation(value = "악보 등록", notes = "악보를 등록한다.")
@@ -62,6 +69,13 @@ public class SheetMusicController {
             @PathVariable("id") Long id) {
 
         return Response.success(sheetMusicService.findSheetMusic(id));
+    }
+
+
+    //이게찐이다 다운로드주소.
+    @GetMapping("/sheetmusics/download/{fileName}")
+    public ResponseEntity<byte[]> download(@PathVariable String fileName) throws IOException {
+        return s3Service.getObject(fileName);
     }
 
     //악보 제목으로 검색

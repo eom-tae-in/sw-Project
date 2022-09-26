@@ -27,5 +27,15 @@ spring:
   servlet.multipart.max-file-size: 5MB
   servlet.multipart.max-request-size: 5MB
 
-jwt:
-  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}       # AWS IAM AccessKey 적기
+      secretKey: ${AWS_SECRET_ACCESS_KEY}   # AWS IAM SecretKey 적기
+    s3:
+      bucket: swproject2
+      dir: pdfs
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
