@@ -82,6 +82,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, "/api/sheetmusics").access("hasRole('ROLE_USER')")
                 .antMatchers(HttpMethod.GET, "/api/sheetmusics").access("hasRole('ROLE_USER')")
+                .antMatchers(HttpMethod.GET, "/api/test/download/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/sheetmusics/pdfs/test/**").access("hasRole('ROLE_USER')")
                 .antMatchers(HttpMethod.GET, "/api/sheetmusics/title/{title}").access("hasRole('ROLE_USER')")
                 .antMatchers(HttpMethod.GET, "/api/sheetmusics/writer/{writer}").access("hasRole('ROLE_USER')")
                 .antMatchers(HttpMethod.GET, "/api/sheetmusics/{id}").access("hasRole('ROLE_USER')")
